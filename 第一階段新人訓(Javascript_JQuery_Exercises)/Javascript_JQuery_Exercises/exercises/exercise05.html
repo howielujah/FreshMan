@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+    <meta name="description" content="description" />
+    <meta name="keywords" content="keywords" />
+    <meta name="author" content="author" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="../default.css" media="screen" />
+    <title>Exercise 05 - Alarm</title>
+    <script type="text/javascript" src="../jquery.js"></script>
+    <script type="text/javascript">
+        // add 0s
+        function pad(num, digits) {
+            var len = num.toString().length;
+            while (len < digits) {
+                num = "0" + num;
+                len++;
+            }
+            return num;
+        }
+
+        function showTime(time) {
+            year = pad(time.getFullYear(), 2);
+            mon = pad(time.getMonth() + 1, 2);
+            date = pad(time.getDate(), 2);
+            hr = pad(time.getHours(), 2);
+            min = pad(time.getMinutes(), 2);
+            sec = pad(time.getSeconds(), 2);
+            document.getElementById("time").innerHTML = year + "-" + mon + "-" + date + " " + hr + ":" + min + ":" + sec;
+        }
+
+        function addNumToTimeSelectMenu() {
+            var str = "<option>請選擇</option>";
+            for (i = 0; i < 24; i++) {
+                str += "<option value=\"";
+                str += i;
+                str += "\">";
+                str += pad(i, 2);
+                str += "</option>";
+            }
+            document.getElementById("hr").innerHTML = str;
+            for (; i < 60; i++) {
+                str += "<option value=\"";
+                str += i;
+                str += "\">";
+                str += pad(i, 2);
+                str += "</option>";
+            }
+            document.getElementById("min").innerHTML = str;
+            document.getElementById("sec").innerHTML = str;
+        }
+
+        function myAlert() {
+            if (confirm("部隊起床!") == true) {
+                //按ok後十秒再響一次
+                var timeoutID = setTimeout(myAlert, 10000);
+            } else {
+                return;
+            }
+        }
+
+        $(document).ready(function () {
+            // call this function to show the time of one Date() object.
+            showTime(new Date());
+            //add the number to time select menu.
+            addNumToTimeSelectMenu();
+            setInterval(function () { showTime(new Date()) }, 1000);
+            
+            var time = {}; //宣告個全域的time物件
+            //選時間後按確定
+            $('input[value="確定"]').click(function () {
+                var myhr = $("#hr").find("option:selected").val();
+                var mymin = $("#min").find("option:selected").val();
+                var mysec = $("#sec").find("option:selected").val();
+                var myyear = new Date().getFullYear();
+                var mymonth = new Date().getMonth();
+                var mydate = new Date().getDate();
+
+                var alerttime = new Date(myyear, mymonth, mydate, myhr, mymin, mysec).getTime();
+
+                if (time[alerttime] == undefined) {  //若是undefined則還沒產生，可以設定鬧鐘
+                    time[alerttime] = 1;
+                    //選時間後, 時間到部隊起床
+                    setTimeout(myAlert, alerttime - new Date().getTime());
+                    return;
+                } //把原本寫的else return; 刪掉了
+            })
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container2">
+
+        <div class="header">
+            <div class="title">
+                Exercise 05
+                <h1>Alarm</h1>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <a href="../index.html">Home</a>
+            <div class="clearer"><span></span>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="content">
+
+                <p>
+                    實作一個鬧鐘，時間格式: YYYY-MM-DD HH:MM:SS (必須是動態時鐘)
+                    <br/>由下拉式選單(幾時幾分幾秒)來訂鬧鐘。
+                    <br/>
+                    <li>鬧鈴響時會跳出一個confirm box</li>
+                    <li>點選cancel來取消鬧鈴</li>
+                    <li>若點選OK，則10秒鐘後鬧鈴會再響，步驟從頭開始</li>
+                    <br/>
+                    <blockquote>
+                        Hint: 使用<a target="_blank" href="http://www.w3schools.com/jsref/jsref_obj_date.asp">Date()</a>
+                        及
+                        <a target="_blank" href="http://www.w3schools.com/js/js_timing.asp">Timing Events</a>
+                    </blockquote>
+                </p>
+
+                <p></p>
+                <p id="time">
+                </p>
+                <p>
+                    <form>
+                        設定鬧鈴:
+                        <select id="hr">
+                        </select>
+                        :
+                        <select id="min">
+                        </select>
+                        :
+                        <select id="sec">
+                        </select>
+                        &nbsp;
+                        <input type="button" value="確定">
+                    </form>
+                </p>
+            </div>
+            <div class="clearer"><span></span>
+            </div>
+
+        </div>
+
+        <div class="footer">&copy; 2006 <a href="index.html">Website.com</a>. Valid <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> &amp; <a href="http://validator.w3.org/check?uri=referer">XHTML</a>. Template design by <a href="http://templates.arcsin.se">Arcsin</a>
+        </div>
+    </div>
+</body>
+
+</html>

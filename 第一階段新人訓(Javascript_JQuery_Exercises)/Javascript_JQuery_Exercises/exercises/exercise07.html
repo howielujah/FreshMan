@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+    <meta name="description" content="description" />
+    <meta name="keywords" content="keywords" />
+    <meta name="author" content="author" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="../default.css" media="screen" />
+    <title>Exercise 07 - Page</title>
+    <script type="text/javascript" src="../jquery.js"></script>
+    
+    <script>
+        $(document).ready(function () {
+
+            function getHTML(url) {
+                $.ajax({ url: url,
+                    type: "GET",
+                    dataType: "html",
+                    success: function (data) {
+                        $("#content").html(data);
+                    },
+                    error: function (xhr, status) {
+                        alert("Sorry, there was a problem!");
+                    }
+                })
+            }
+
+            //點First去抓exercise01.html的資料
+            $("a:contains('First')").click(function () {
+                
+                getHTML('exercise01.html');
+            })
+
+            //點Second去抓exercise02.html的資料
+            $("a:contains('Second')").click(function () {
+                
+                getHTML('exercise02.html');
+            })
+
+            //點Third去抓exercise03.html的資料
+            $("a:contains('Third')").click(function () {
+                
+                getHTML('exercise03.html');
+            })
+
+        })
+    </script>
+
+</head>
+
+<body>
+    <div class="container2">
+
+        <div class="header">
+            <div class="title">
+                Exercise 07
+                <h1>Page</h1>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <a href="../index.html">Home</a>
+            <div class="clearer"><span></span>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="content">
+
+                <p>
+                    請使用AJAX局部更新網頁區塊的技術，模擬分頁效果
+                    <br/>例如：
+                    <a target="_blank" href="http://www.books.com.tw/">博客來</a>的產品廣告有許多分頁，點選一個按鍵後該區塊會快速換頁。
+                    <blockquote>Note. 可以使用exercise1、2、3的html來作為分頁</blockquote>
+                    <blockquote>
+                        Hint: <a target="_blank" href="http://www.w3schools.com/jquery/jquery_ref_ajax.asp">ajax</a>
+                    </blockquote>
+                </p>
+                <p>
+                    <div id="tabnav" style="width:500px">
+                        <ul class="tabs">
+                            <li><a href="#content">First</a>
+                            </li>
+                            <li><a href="#content">Second</a>
+                            </li>
+                            <li><a href="#content">Third</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div id="content" style="width:500px;height:400px;border:1px solid;overflow:auto"><!--加上捲軸-->
+                            請將網頁內容更新在此。
+                        </div>
+                </p>
+
+
+                </div>
+            </div>
+            <div class="clearer"><span></span>
+            </div>
+
+
+
+            <div class="footer">&copy; 2006 <a href="index.html">Website.com</a>. Valid <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> &amp; <a href="http://validator.w3.org/check?uri=referer">XHTML</a>. Template design by <a href="http://templates.arcsin.se">Arcsin</a>
+            </div>
+        </div>
+</body>
+
+</html>

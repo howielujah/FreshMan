@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+    <meta name="description" content="description" />
+    <meta name="keywords" content="keywords" />
+    <meta name="author" content="author" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="../default.css" media="screen" />
+    <title>Exercise 02 - Traversing</title>
+    <script type="text/javascript" src="../jquery.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            
+            //下拉選單選顏色
+            $("#color").change(function () {
+                colorVal = $("#color").find("option:selected").val();
+                console.log(colorVal);
+            })
+
+            //點擊全部變色按鈕
+            $("#each").click(function () {
+                $("li").each(function () {
+                    $(this).css('color', colorVal);
+                });
+            })
+
+            //點擊第一個變色按鈕
+            $("#first").click(function () {
+                $("li").first().css('color', colorVal);
+            })
+
+            //點擊最後一個變色按鈕
+            $("#last").click(function () {
+                $("li").last().css('color', colorVal);
+            })
+
+            //點擊偶數變色按鈕
+            $("#odd").click(function () {
+                $("li").filter(":odd").css('color', colorVal);
+            })
+
+            //點擊奇數變色按鈕
+            $("#even").click(function () {
+                $("li").filter(":even").css('color', colorVal);
+            })
+
+            //下拉選單選第X個
+            $("#x").change(function () {
+                xVal = $("#x").find("option:selected").val() - 1;
+
+                console.log(xVal);
+            })
+            //點第X個變色按鈕
+            $("#eq").click(function () {
+                if (xVal == -1) {
+                } else {
+                    $("li").eq(xVal).css('color', colorVal);
+                }
+            })
+            //點X前一個變色按鈕
+            $('#prev').click(function () {
+                if (xVal == -1) {
+                }else
+                    $("li:eq("+xVal+")").prev().css('color', colorVal);
+            })
+            
+            //點X前全部變色按鈕
+            $('#prevAll').click(function () {
+                if (xVal == -1) {
+                } else
+                    $("li:eq(" + xVal + ")").prevAll(xVal).css('color', colorVal);
+            })
+            //點X後一個變色按鈕
+            $('#next').click(function () {
+                if (xVal == -1) {
+                } else
+                    $("li:eq(" + xVal + ")").next(xVal).css('color', colorVal);
+            })
+            
+            //點X和後一個變色按鈕
+            $('#andSelf').click(function () {
+               
+                    $("li:eq(" + xVal + ")").next(xVal).andSelf().css('color', colorVal);
+            })
+
+            //點不含X其他變色按鈕
+            $('#not').click(function () {
+                    $("li").not(":eq(" + xVal + ")").css('color', colorVal);
+            })
+
+            //點第一個到X變色按鈕
+            $('#slice').click(function () {
+                if (xVal == -1) {
+                } else
+                    $("li").slice(0, xVal+1).css('color', colorVal);
+            })
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container2">
+
+        <div class="header">
+            <div class="title">
+                Exercise 02
+                <h1>Traversing</h1>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <a href="../index.html">Home</a>
+            <div class="clearer"><span></span>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="content">
+
+                <div id="area" style="background-color:White;width: 600px; height: 300px;">
+                    <p>請根據按鈕規則和jquery Traversing讓清單項目變色</p>
+                    <p>(<span style="color:#ff0000;">請注意:</span>HTML不可更改，直接寫script的部分，且按鈕的方法是有限制的)
+                        <blockquote>Hint: <a target="_blank" href="http://api.jquery.com/category/traversing/">Traversing</a>
+                        </blockquote>
+                    </p>
+                    <ul>
+                        <li>test1</li>
+                        <li>test2</li>
+                        <li>test3</li>
+                        <li>test4</li>
+                        <li>test5</li>
+                        <li>test6</li>
+                    </ul>
+                </div>
+                <br />
+                <select id="color">
+                    <option selected="selected" value="">color</option>
+                    <option value="Black" style="color:Black">Black</option>
+                    <option value="Red" style="color:Red">Red</option>
+                    <option value="White" style="color:White">White</option>
+                    <option value="Grey" style="color:Grey">Grey</option>
+                    <option value="Orange" style="color:Orange">Orange</option>
+                    <option value="Maroon" style="color:Maroon">Maroon</option>
+                    <option value="Green" style="color:Green">Green</option>
+                    <option value="Olive" style="color:Olive">Olive</option>
+                    <option value="Cyan" style="color:Cyan">Cyan</option>
+                    <option value="Blue" style="color:Blue">Blue</option>
+
+                </select>
+				<!-- 請使用each方法 -->
+                <input type="button" id="each" value="全部變色" />
+                <!-- 請使用first方法 -->
+                <input type="button" id="first" value="第一個變色" />
+                <!-- 請使用last方法 -->
+                <input type="button" id="last" value="最後一個變色" />
+                <!-- 請使用filter方法 -->
+                <input type="button" id="odd" value="偶數變色" />
+                <!-- 請使用filter方法 -->
+                <input type="button" id="even" value="基數變色" />
+                
+                <br />變數: X 為
+                <select id="x">
+                    <option selected="selected" value="">x</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                </select>
+				<!-- 請使用eq方法 -->
+                <input type="button" id="eq" value="第X個變色" />
+                <!-- 請使用prev方法 -->
+                <input type="button" id="prev" value="X前一個變色" />
+                <!-- 請使用prevAll方法 -->
+                <input type="button" id="prevAll" value="X前全部變色" />
+                <!-- 請使用next方法 -->
+                <input type="button" id="next" value="X後一個變色" />
+                <!-- 請使用andSelf方法 -->
+                <input type="button" id="andSelf" value="X和後一個變色" />
+                <br />
+				<!-- 請使用not方法 -->
+                <input type="button" id="not" value="不含X其他變色" />
+                <!-- 請使用slice方法 -->
+                <input type="button" id="slice" value="第一個到X變色" />
+            </div>
+            <div class="clearer"><span></span>
+            </div>
+
+        </div>
+
+        <div class="footer">&copy; 2006 <a href="index.html">Website.com</a>. Valid <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> &amp; <a href="http://validator.w3.org/check?uri=referer">XHTML</a>. Template design by <a href="http://templates.arcsin.se">Arcsin</a>
+        </div>
+    </div>
+
+</body>
+
+</html>

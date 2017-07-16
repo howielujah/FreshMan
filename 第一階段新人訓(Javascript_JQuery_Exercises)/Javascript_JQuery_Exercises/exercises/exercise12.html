@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+    <meta name="description" content="description" />
+    <meta name="keywords" content="keywords" />
+    <meta name="author" content="author" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="../default.css" media="screen" />
+    <title>Exercise 12 - Transcripts</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="../jqgrid_demo40/themes/redmond/jquery-ui-1.8.2.custom.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="../jqgrid_demo40/themes/ui.jqgrid.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="../jqgrid_demo40/themes/ui.multiselect.css" />
+    <script type="text/javascript" src="../jquery.js"></script>
+    <script src="../jqgrid_demo40/js/jquery.layout.js" type="text/javascript"></script>
+    <script src="../jqgrid_demo40/js/i18n/grid.locale-en.js" type="text/javascript"></script>
+    <script src="../jqgrid_demo40/js/jquery.jqGrid.min.js" type="text/javascript"></script>
+    <script src="../jqgrid_demo40/js/jquery.tablednd.js" type="text/javascript"></script>
+    <script src="../jqgrid_demo40/js/jquery.contextmenu.js" type="text/javascript"></script>
+    <script src="../jqgrid_demo40/js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script>
+    <script src="../jqgrid_demo40/js/ui.multiselect.js" type="text/javascript"></script>
+    <script>
+        $(function () {
+            $("#grid_id").jqGrid({
+                datatype: "local",
+                height: 250,
+                colNames: ['sid', 'stu_id', 'stu_name', 'tea_name', 'course', 'semester', 'score'],
+                colModel: [
+                { name: 'sid', index: 'sid', width: 40, align: "center", editable: true,sortable:true },
+                { name: 'stu_id', index: 'stu_id', width: 40, align: "center", editable: true },
+                { name: 'stu_name', index: 'stu_name', width: 100, align: "center", editable: true },
+                { name: 'tea_name', index: 'tea_name', width: 100, align: "center", editable: true },
+                { name: 'course', index: 'course', width: 100, align: "center", editable: true },
+                { name: 'semester', index: 'semester', width: 100, align: "center", editable: true },
+                { name: 'score', index: 'score', width: 40, align: "right", editable: true}],
+                multiselect: true,
+                editurl: "http://192.168.0.105:9099/suggest.php",  //此為callback function，return的值會交給這隻程式處理
+                sortorder: "asc"
+            });
+            
+            //新增
+            $("#add_data").on('click', function () {
+
+                jQuery("#grid_id").jqGrid('editGridRow', "new");
+            })
+            //修改
+            $("#edit_data").on('click', function () {
+                
+                var gr = jQuery("#grid_id").jqGrid('getGridParam', 'selrow');
+                if (gr != null) jQuery("#grid_id").jqGrid('editGridRow', gr, { height: 280, reloadAfterSubmit: false });
+                else alert("Please Select Row");
+            })
+
+            //刪除
+            $("#del_data").on('click', function () {
+                var idarray = $("#grid_id").jqGrid('getGridParam', 'selarrrow'); //selarrrow可多選，selrow單選
+                //alert(idarray);
+
+                while (idarray.length > 0) {
+                    var row = $("#grid_id").jqGrid('getRowData', idarray[0]);
+                    $("#grid_id").jqGrid('delRowData', idarray[0]);
+                }
+            })
+
+        })
+    </script>
+</head>
+
+<body>
+    <div class="container2">
+
+        <div class="header">
+            <div class="title">
+                Exercise 12
+                <h1>Transcripts</h1>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <a href="../index.html">Home</a>
+            <div class="clearer"><span></span>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="content">
+
+                <p>
+                    使用jqGrid實作一套打成績系統，可以新增、修改、刪除成績。
+                    <br/>一筆成績含有以下資訊：
+                    <li>編號 (sid)</li>
+                    <li>學生學號 (stu_id)</li>
+                    <li>學生姓名 (stu_name)</li>
+                    <li>教師姓名 (tea_name)</li>
+                    <li>修習課程 (course)</li>
+                    <li>修習學期 (semester)</li>
+                    <li>總成績 (score)</li>
+                    <br/>
+                    <blockquote>Reference: <a target="_blank" href="http://www.trirand.com/blog/jqgrid/jqgrid.html">jqGrid Demo</a>
+                    </blockquote>
+                </p>
+
+                <p>
+                    <table id="grid_id"></table>
+                </p>
+
+            </div>
+            <div class="clearer"><span></span>
+            </div>
+            <input type="BUTTON" id="edit_data" value="Edit Selected" />
+            <input type="BUTTON" id="add_data" value="Add Data" />
+            <input type="BUTTON" id="del_data" value="Delete Selected" />
+
+        </div>
+
+        <div class="footer">&copy; 2006 <a href="index.html">Website.com</a>. Valid <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> &amp; <a href="http://validator.w3.org/check?uri=referer">XHTML</a>. Template design by <a href="http://templates.arcsin.se">Arcsin</a>
+        </div>
+    </div>
+</body>
+
+</html>

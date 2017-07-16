@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+    <meta name="description" content="description" />
+    <meta name="keywords" content="keywords" />
+    <meta name="author" content="author" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="../default.css" media="screen" />
+    <title>Exercise 01 - Attributes for JQuery</title>
+    <link rel="stylesheet" href="../ui.datepicker.css" type="text/css" media="screen" title="core css file" charset="utf-8" />
+    <script type="text/javascript" src="../jquery.js"></script>
+    <script type="text/javascript" src="../ui.datepicker.js"></script>
+    
+    <script type="text/javascript">
+        $(function () {
+            //載入預設值
+            $('input[name="cardColor"]').prop("checked", false);
+            $("#text").val("");
+
+            //點擊radio變換卡片一的樣式
+            $('input[name="cardColor"]').click(function () {
+                var cardVal = $(this).val();
+                $("#card").removeClass("xStyle yStyle zStyle");
+                //判斷目前點擊的是哪個radio，在去加上相對的樣式，用value值判斷
+                if (cardVal == 'x') {
+                    $("#card").addClass('xStyle');
+                } else if (cardVal == 'y') {
+                    $("#card").addClass('yStyle');
+                } else {
+                    $("#card").addClass('zStyle');
+                }
+            });
+
+            //按下"鎖定文字"按鈕
+            $("#button1").click(function () {
+
+                //判斷按下按鈕時，按紐文字是" 鎖定文字 "還是" 解除鎖定"
+                if ($("#button1").val() == " 鎖定文字 ") {
+                    //當按下"鎖定文字"，會將"卡片1文字"輸入欄 Disabled，同時將"卡片1文字"框內容寫入卡片一，按鈕文字變為"解除鎖定"
+
+                    var textText = $("#text").val(); //讀"卡片1文字"輸入欄的字
+                    $("#card").text(textText);       //把輸入的字放到卡片裡
+                    $("#button1").val(" 解除鎖定 ");
+                    $("#text").prop('disabled', true);
+                } else {
+                    //當按下"解除鎖定"，才可重新編輯文字框
+                    $("#button1").val(" 鎖定文字 ");
+                    $("#text").prop('disabled', false);
+                }
+            });
+
+            //按下變更框線，卡片1可以在紅黑兩種框線顏色中切換
+            $("#button2").click(function () {
+                //判斷現在框線是黑的還是紅的
+                if ($("#card").hasClass("blackBorderStyle")) {
+                    $("#card").removeClass("blackBorderStyle");
+                    $("#card").addClass("redBorderStyle");
+                } else {
+                    $("#card").removeClass("redBorderStyle");
+                    $("#card").addClass("blackBorderStyle");
+                }
+            });
+            //按下卡片複製，會將卡片1的所有屬性及文字複製一份至卡片2
+            $("#button3").click(function () {
+                $("#card2").text($("#card").text());
+                $("#card2").attr("class", $("#card").attr("class"));
+            });
+
+        });
+    </script>
+    
+    <style type="text/css">
+        .defaultStyle {
+            background-color: #ffffff;
+            width: 300px;
+            height: 160px;
+            border: 1px;
+            text-align: center;
+            line-height: 15px;
+            font-size: 15px;
+        }
+        .blackBorderStyle {
+            border-width: 2px;
+            border-style: solid;
+            border-color: black;
+        }
+        .redBorderStyle {
+            border-width: 2px;
+            border-style: solid;
+            border-color: red;
+        }
+        .xStyle {
+            background-color: #40ff40;
+            font-size: 15px;
+        }
+        .yStyle {
+            background-color: #7f7fff;
+            font-size: 20px;
+        }
+        .zStyle {
+            background-color: #bfbfbf;
+            font-size: 25px;
+        }
+        .wordbreak{ word-wrap: break-word;}
+    </style>
+
+</head>
+
+<body>
+    <div class="container2">
+
+        <div class="header">
+            <div class="title">
+                Exercise 01
+                <h1>Attributes for JQuery</h1>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <a href="../index.html">Home</a>
+            <div class="clearer"><span></span>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="content">
+
+                <p>
+                    請實做一簡易卡片產生器：
+                    <li>當選擇樣式1、2、3時，卡片會分別套用xStyle、yStyle、zStyle</li>
+                    <li>當按下"鎖定文字"按鈕時，會將"卡片1文字"框Disabled，同時將"卡片1文字"框內容寫入卡片一，
+                        <br />按鈕文字變為"解除鎖定"
+                    </li>
+                    <li>當按下"解除鎖定"，才可重新編輯文字框</li>
+                    <li>按下變更框線，卡片1可以在紅黑兩種框線顏色中切換</li>
+                    <li>按下卡片複製，會將卡片1的所有屬性及文字複製一份至卡片2</li>
+                    <br>
+                    <blockquote>Hint: <a target="_blank" href="http://api.jquery.com/category/manipulation/class-attribute/">Class Attribute</a>
+                    </blockquote>
+                </p>
+
+                <div>
+                </div>
+                <table>
+                    <tr>
+                        <td>卡片1樣式：
+                            <input name="cardColor" type="radio" value="x"/>樣式1
+                            <input name="cardColor" type="radio" value="y"/>樣式2
+                            <input name="cardColor" type="radio" value="z"/>樣式3　
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>卡片1文字：
+                            <input id="text" type="text" value="" >
+                        </td>
+                        <td>
+                            <input id="button1" type="button" value=" 鎖定文字 " />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input id="button2" type="button" value=" 變更框線 " />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input id="button3" type="button" value=" 卡片複製 " />
+                        </td>
+                    </tr>
+                </table>
+                卡片1
+                <div id="card" class="defaultStyle blackBorderStyle wordbreak">
+                </div>
+                卡片2
+                <div id="card2" class="defaultStyle blackBorderStyle wordbreak">
+                </div>
+
+            </div>
+            <div class="clearer"><span></span>
+            </div>
+
+        </div>
+
+        <div class="footer">&copy; 2006 <a href="index.html">Website.com</a>. Valid <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> &amp; <a href="http://validator.w3.org/check?uri=referer">XHTML</a>. Template design by <a href="http://templates.arcsin.se">Arcsin</a>
+        </div>
+    </div>
+</body>
+
+</html>

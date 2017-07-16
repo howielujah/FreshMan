@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+    <meta name="description" content="description" />
+    <meta name="keywords" content="keywords" />
+    <meta name="author" content="author" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="../default.css" media="screen" />
+    <title>Exercise 09 - Elective System</title>
+    <script type="text/javascript" src="../jquery.js"></script>
+    <script type="text/javascript" src="../jquery.cookie.js"></script>
+    <script type="text/javascript">
+         $(function () {
+        $("#serch_result").empty();  //清空左邊
+        var arr = $.cookie('the_cookie').split(',');  //把cookie的值(課程編號)裝到陣列
+        var myarray = new Array();
+        $.each(arr, function (index, value) {
+            $.getJSON('http://192.168.0.105:9099/schedule.php', { ser_no: value }, function (datas) {  //回傳JSON字串，把課程資訊顯示在左邊
+                console.log(datas);
+                myarray.push(datas);
+                var col = $("<td></td>").html("<a>" + datas.ser_no + " " + datas.cou_cname + " " + datas.tea_cname + "</a>");
+                var row = $("<tr></tr>").append(col);
+                $("#serch_result").append(row);
+                
+            })
+        
+        })
+
+        $("#serch_result").on('click', 'a', insert);   //點課程資訊連結，呼叫insert
+
+        function insert() {                            //把點到課程資訊顯示在右邊
+            var atxt = $(this).text();
+            var serno = atxt.substring(0, atxt.indexOf(" "));
+            $.each(myarray, function (index, value) {
+                if (value.ser_no == serno) {          //用課的編號判斷你點哪個課
+                    //console.log(serno);
+                    $('input[name="ser_no"]').val(value.ser_no);
+                    $('input[name="credit"]').val(value.credit);
+                    $('input[name="cou_cname"]').val(value.cou_cname);
+                    $('input[name="tea_cname"]').val(value.tea_cname);
+                    $('input[name="daytime"]').val(value.daytime);
+                    $('input[name="mark"]').val(value.mark);
+                }
+            })
+        }
+        })
+    </script>
+</head>
+
+<body>
+    <div class="container2">
+
+        <div class="header">
+            <div class="title">
+                Exercise 09
+                <h1>Elective System</h1>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <a href="" onClick="window.close()">Close</a>
+            <div class="clearer"><span></span>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="content">
+
+                <p>
+                    我預計要選的課程：
+                    <table>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td width="400">
+                                <table id="serch_result">
+                                    <!-- 搜尋結果的課程名稱以一行一個課程顯示在這兒 -->
+                                    <tr>
+                                        <td>
+                                            <a>範例課程A</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <a>範例課程B</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td colspan="2">詳細資訊</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ser_no:</td>
+                                        <td>
+                                            <input type="text" name="ser_no" id="ser_no" disabled="true" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>credit:</td>
+                                        <td>
+                                            <input type="text" name="credit" id="credit" disabled="true" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>cou_cname:</td>
+                                        <td>
+                                            <input type="text" name="cou_cname" id="cou_cname" value="範例課程A" disabled="true" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>tea_cname:</td>
+                                        <td>
+                                            <input type="text" name="tea_cname" id="tea_cname" disabled="true" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>daytime:</td>
+                                        <td>
+                                            <input type="text" name="daytime" id="daytime" disabled="true" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>mark:</td>
+                                        <td>
+                                            <input type="text" name="mark" id="mark" disabled="true" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <script type="text/javascript">
+                    </script>
+
+                </p>
+
+            </div>
+            <div class="clearer"><span></span>
+            </div>
+
+        </div>
+
+        <div class="footer">&copy; 2006 <a href="index.html">Website.com</a>. Valid <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> &amp; <a href="http://validator.w3.org/check?uri=referer">XHTML</a>. Template design by <a href="http://templates.arcsin.se">Arcsin</a>
+        </div>
+    </div>
+</body>
+
+</html>

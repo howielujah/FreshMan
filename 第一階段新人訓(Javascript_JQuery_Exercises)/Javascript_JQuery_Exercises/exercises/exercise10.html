@@ -1,0 +1,425 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+    <meta name="description" content="description" />
+    <meta name="keywords" content="keywords" />
+    <meta name="author" content="author" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="../default.css" media="screen" />
+    <title>Exercise 10 - Form Validation</title>
+    <link rel="stylesheet" href="../ui.datepicker.css" type="text/css" media="screen" title="core css file" charset="utf-8" />
+    <script type="text/javascript" src="../jquery.js"></script>
+    <script type="text/javascript" src="../ui.datepicker.js"></script>
+    <script>
+        $(function () {
+
+            var dateObj = new Date();
+            var year = dateObj.getFullYear();
+            var stYy = $("#stYy");
+            var stMm = $("#stMm");
+            var stDd = $("#stDd");
+            var edYy = $("#edYy");
+            var edMm = $("#edMm");
+            var edDd = $("#edDd");
+
+            //載入start date年份選單
+            function loadYear() {
+                for (var i = year; i <= (year + 10); i++) {
+                    var op = $("<option></option>");
+                    op.val(i);
+                    op.text(i);
+                    var op2 = $("<option></option>");
+                    op2.val(i);
+                    op2.text(i);
+                    stYy.append(op);
+                    edYy.append(op2);
+                }
+            }
+
+            loadYear();
+
+            //載入start date月份選單
+            function loadMonth() {
+                for (var i = 1; i <= 12; i++) {
+                    var op = $("<option></option>");
+                    op.val(i);
+                    op.text(i);
+                    var op2 = $("<option></option>");
+                    op2.val(i);
+                    op2.text(i);
+                    stMm.append(op);
+                    edMm.append(op2);
+                }
+            }
+
+            loadMonth();
+
+            //選start date 的年跟月
+            stYy.add(stMm).on('change', function () {
+                //stDd.empty();
+
+                var yy = stYy.find("option:selected").val();
+                var mm = stMm.find("option:selected").val();
+                var datecount = new Date(yy, mm, 0);
+
+                //載入start date的日選單
+                loaddate(datecount, stDd);
+            })
+
+            function loaddate(dateObj, sobj) {
+                sobj.empty();
+                var choose = $("<option></option>").text('請選擇');
+                sobj.append(choose);
+                for (var i = 1; i <= dateObj.getDate(); i++) {
+                    var op = $("<option></option>");
+                    op.val(i);
+                    op.text(i);
+                    sobj.append(op);
+                }
+            }
+
+
+            //選Start Date的日
+            stDd.on('change', function () {
+                var yy = stYy.find("option:selected").val();
+                var mm = stMm.find("option:selected").val();
+                var dd = stDd.find("option:selected").val();
+                var enddd = new Date(yy, --mm, ++dd);
+                var newmm = enddd.getMonth() + 1;
+
+                //設定End Date的年跟月
+                edYy.find("option[value = " + enddd.getFullYear() + "]").prop("selected", true);
+                edMm.find("option[value = " + newmm + "]").prop("selected", true);
+
+                var startdd = new Date(enddd.getFullYear(), newmm, 0);
+                //載入End date的日選單
+                loaddate(startdd, edDd);
+
+                edDd.find("option[value = " + enddd.getDate() + "]").prop("selected", true);
+
+            })
+
+            //選end date 年、月
+            edYy.add(edMm).on('change', function () {
+
+                var yy = edYy.find("option:selected").val();
+                var mm = edMm.find("option:selected").val();
+                var dateObj = new Date(yy, mm, 0);
+                //載入End date的日選單
+                loaddate(dateObj, edDd);
+            })
+
+            var inputelements = new Array();
+            //把input元素放入inputelements陣列
+            for (var i = 0; i < 8; i++) {
+                inputelements.push($("table input")[i]);
+            }
+            //如果輸入長度滿了游標跳到下一個input元素
+            function focusnext(inputobj) {
+                var user = inputobj.val();
+                var max = inputobj.attr('maxlength');
+                if (user.length == max) {
+                    var index = inputelements.indexOf(inputobj[0]);
+                    if (index == (inputelements.length - 1)) return; //最後一個input元素滿了的話不動作
+                    inputelements[index + 1].focus();
+                }
+            }
+
+            //輸入Username
+            $("#usr").on('keyup', function () {
+
+                focusnext($("#usr"));
+
+            })
+
+            //輸入Password
+            $("#passwd").on('keyup', function () {
+                focusnext($("#passwd"));
+            })
+
+            //輸入Password Conform
+            $("#passwd2").on('keyup', function () {
+                focusnext($("#passwd2"));
+
+            })
+
+            //輸入First Name
+            $("#fn").on('keyup', function () {
+                focusnext($("#fn"));
+            })
+
+            //輸入Last Name
+            $("#ln").on('keyup', function () {
+                focusnext($("#ln"));
+            })
+
+            //datepicker
+            $("#birth").datepicker({ dateFormat: 'yy/mm/dd' });
+
+            $("#birth").on('change', function () {
+                focusnext($("#birth"));
+            })
+
+            //輸入Cell Phone
+            $("#phone").on('keyup', function () {
+                focusnext($("#phone"));
+            })
+
+            //輸入Email
+            $("#mail").on('keyup', function () {
+                focusnext($("#mail"));
+            })
+
+            //清空輸入
+            $("#clear").on('click', function () {
+                $("#usr").val("");
+                $("#passwd").val("");
+                $("#passwd2").val("");
+                $("#fn").val("");
+                $("#ln").val("");
+                $("#birth").val("");
+                $("#phone").val("");
+                $("#mail").val("");
+                $("#stYy").empty();
+                $("#stYy").append($("<option></option>").text('請選擇'));
+                $("#stMm").empty();
+                $("#stMm").append($("<option></option>").text('請選擇'));
+                $("#stDd").empty();
+                $("#stDd").append($("<option></option>").text('請選擇'));
+                $("#edYy").empty();
+                $("#edYy").append($("<option></option>").text('請選擇'));
+                $("#edMm").empty();
+                $("#edMm").append($("<option></option>").text('請選擇'));
+                $("#edDd").empty();
+                $("#edDd").append($("<option></option>").text('請選擇'));
+                loadYear();
+                loadMonth();
+            })
+
+        })
+        
+        //驗證輸入欄位
+        function checkinput(input,regstr,errormsg) {
+            if (input == $("#passwd2"))
+                var pattern = regstr;  //如果是要驗證Password Conform，pattern是Password的value
+            else
+                var pattern = new RegExp(regstr); //如果驗證其他input，pattern是傳入的正則表示式
+            
+            var inputval = input.val();
+            if (inputval.match(pattern)) {
+                //alert('ok');
+                return true;
+            } else {
+                alert(errormsg);
+                input.focus();
+                return false;
+            }
+        }
+
+        //驗證start date & end date 
+        function sded() {
+
+            var stYy = $("#stYy");
+            var stMm = $("#stMm");
+            var stDd = $("#stDd");
+            var edYy = $("#edYy");
+            var edMm = $("#edMm");
+            var edDd = $("#edDd");
+
+            var syy = stYy.find("option:selected").val();
+            var smm = stMm.find("option:selected").val() - 1;
+            var sdd = stDd.find("option:selected").val();
+
+            var sdate = new Date(syy, smm, sdd);
+            //alert(sdate);
+            var eyy = edYy.find("option:selected").val();
+            var emm = edMm.find("option:selected").val() - 1;
+            var edd = edDd.find("option:selected").val();
+
+            var edate = new Date(eyy, emm, edd);
+
+            if (sdate == 'Invalid Date' || edate == 'Invalid Date') {
+                alert('Start Date 或 End Date 沒選');
+                return false;
+            }
+            else if ((edate - sdate) <= 0) {
+                alert('End Date 在 Start Date以前');
+                return false; 
+            }
+            else return true;
+        }
+        //裝正則表示是的變數
+        var usrregex = '^([a-zA-Z])([A-Za-z0-9_]){5,11}$'; // (6~12)英文開頭、後面接英文/數字/_
+        var passwdregex = '^([A-Za-z0-9]){6,12}$';         // (6~12)英文/數字
+        var fnregex = '^[A-Za-z]{1,30}$';                  // (1~30) 英文
+        var lnregex = '^[A-Za-z]{1,30}$';                  // (1~30) 英文
+        var birthregex = '^[0-9]{4}/(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])$'; // (YYYY/MM/DD)
+        var phoneregex = '^09[0-9]{8}$';                   // 09xxxxxxxx
+        var mailregex = '^[^@]+@[^@.]+\.[^@.]+[^@]*$';     // '@'前至少一個char, '@'後至少一個'.', 且'.'前後至少需一個char. 只能有一個@
+
+        function check() {
+
+            if (!checkinput($("#usr"), usrregex, "User Name錯誤")) {  
+                return false;
+            }
+            if (!checkinput($("#passwd"), passwdregex, "Password錯誤")) {   
+                return false;
+            }
+            if (!checkinput($("#passwd2"), $("#passwd").val(), "Password Conform錯誤")) {  //Password Conform要跟Password一樣
+                return false;
+            }
+            if (!checkinput($("#fn"), fnregex, "First Name錯誤")) {   
+                return false;
+            }
+            if (!checkinput($("#ln"), lnregex, "Last Name錯誤")) {   
+                return false;
+            }
+            if (!checkinput($("#birth"), birthregex, "Birthday錯誤")) {   
+                return false;
+            }
+            if (!checkinput($("#phone"), phoneregex, "Cell Phone錯誤")) {  
+                return false;
+            }
+            if (!checkinput($("#mail"), mailregex, "E-Mail錯誤")) { 
+                return false;
+            }
+            if (!sded()) {  //選擇start date時，due date跳到至少比start date晚一天。驗證迄日在起日之後
+                return false;
+            }
+            return true;
+        };
+    </script>
+</head>
+
+<body>
+    <div class="container2">
+        <div class="header">
+            <div class="title">
+                Exercise 10
+                <h1>Form Validation</h1>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <a href="../index.html">Home</a>
+            <div class="clearer"><span></span>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="content">
+
+                <p>
+                    有一個表單如下：
+                    <li>user name (12) - 英文開頭、後面接英文/數字/_</li>
+                    <li>password (6~12) - 英文/數字</li>
+                    <li>password confirm</li>
+                    <li>first name (1~30) & last name (1~30)</li>
+                    <li>birthday (YYYY/MM/DD) - 點選一個line edit則跳出小月曆，點選一個日期後會自動出現在該欄位上</li>
+                    <li>cell phone (10) - 09xxxxxxxx</li>
+                    <li>e-mail (70) - '@'前至少一個char, '@'後至少一個'.', 且'.'前後至少需一個char. 只能有一個@</li>
+                    <li>start date & end date - 選擇start date時，due date跳到至少比start date晚一天。驗證迄日在起日之後</li>
+                </p>
+                <p>
+                    其餘規則：
+                    <li>當一個欄位字數已滿，則游標自動跳到下一欄位</li>
+                    <li>點選Clear後所有欄位回歸預設值</li>
+                    <li>填寫完畢後點選Submit，經過驗證(驗證規則如上)後畫面上顯示填寫的資料</li>
+                    <li>若資料有誤，則跳出一個alert box並自動將游標移至錯誤的欄位</li>
+                    <br/>
+                    <blockquote>
+                        Hint1: <a target="_blank" href="http://www.w3schools.com/jsref/jsref_obj_regexp.asp">Regular Expression</a>
+                    </blockquote>
+                    <blockquote>
+                        Hint2: 小月曆請使用 <a target="_blank" href="http://jqueryui.com/demos/datepicker/">datepicker</a>
+                    </blockquote>
+
+                </p>
+
+                <form id="form1" onSubmit="return check()" name="f1" method="post" action="http://192.168.0.105:9099/join.php">
+                    <table height="200px" width="700px">
+                        <tr>
+                            <td colspan=2>User Name:
+                                <input type="text" id="usr" maxlength="12" size="13" name="usr">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Password:
+                                <input type="password" id="passwd" maxlength="12" size="13" name="passwd">
+                            </td>
+                            <td>Password Conform:
+                                <input type="password" id="passwd2" maxlength="12" size="13" name="passwd2">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>First Name:
+                                <input type="text" id="fn" maxlength="30" size="15" name="fn">
+                            </td>
+                            <td>Last Name:
+                                <input type="text" id="ln" maxlength="30" size="15" name="ln">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Birthday:
+                                <input type="text" id="birth" maxlength="10" size="11" name="birth">
+                            </td>
+                            <td>Cell Phone:
+                                <input type="text" id="phone" maxlength="10" size="11" name="phone">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan=2>E-Mail:
+                                <input type="text" id="mail" maxlength="70" size="40" name="mail">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Start Date:
+                                <select id="stYy" name="stYy">
+                                    <option>請選擇</option>
+                                </select>年
+                                <select id="stMm" name="stMm">
+                                    <option>請選擇</option>
+                                </select>月
+                                <select id="stDd" name="stDd">
+                                    <option>請選擇</option>
+                                </select>日
+                            </td>
+                            <td>
+                                End Date:
+                                <select id="edYy" name="edYy">
+                                    <option>請選擇</option>
+                                </select>年
+                                <select id="edMm" name="edMm">
+                                    <option>請選擇</option>
+                                </select>月
+                                <select id="edDd" name="edDd">
+                                    <option>請選擇</option>
+                                </select>日
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan=2>
+                                <input type="submit" value="Submit" id="submit">
+                                <input type="button" value="Clear" id="clear">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+
+            </div>
+            <div class="clearer"><span></span>
+            </div>
+
+        </div>
+
+        <div class="footer">&copy; 2006 <a href="index.html">Website.com</a>. Valid <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> &amp; <a href="http://validator.w3.org/check?uri=referer">XHTML</a>. Template design by <a href="http://templates.arcsin.se">Arcsin</a>
+        </div>
+    </div>
+
+</body>
+
+</html>

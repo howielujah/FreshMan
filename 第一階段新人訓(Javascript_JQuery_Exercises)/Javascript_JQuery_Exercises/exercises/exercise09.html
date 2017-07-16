@@ -1,0 +1,262 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+    <meta name="description" content="description" />
+    <meta name="keywords" content="keywords" />
+    <meta name="author" content="author" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="../default.css" media="screen" />
+    <title>Exercise 09 - Elective System</title>
+    <script type="text/javascript" src="../jquery.js"></script>
+    <script type="text/javascript" src="../jquery.cookie.js"></script>
+    <script>
+        $(function () {
+
+            //輸入keyword進行搜尋
+            $("#keyword").keyup(function () {
+                input = $("#keyword").val();
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://192.168.0.105:9099/suggest.php',
+                    data: { key: input },
+                    dataType: 'text'
+                }).done(function (data) {
+                    $("#suggest").text(data);   //每輸入一個字底下就會出現建議關鍵字連結
+                }).fail(function (xhr, status) {
+                    alert("Sorry, there was a problem!");
+                })
+            })
+            //點選該連結則會自動帶入搜尋欄位
+            $("#suggest").click(function () {
+                var str = $("#suggest").text();
+                $("#keyword").val(str);
+            })
+
+            //按下搜尋後呼叫搜尋網頁
+            $('input[value="搜尋"]').on('click', function () {
+                input = $("#keyword").val();
+                $.getJSON('http://192.168.0.105:9099/search.php', { key: input }, function (datas) {  //搜尋結果會以JSON type回傳並顯示
+                    
+                    newArray = dedup(datas.CourseList);  //去除重複放到陣列
+                    $("#serch_result").empty();  //清空左邊
+                    
+                    $.each(newArray, function (index, value) {
+                        var col = $("<td></td>").html("<a>" + value.ser_no + " " + value.cou_cname + " " + value.tea_cname + "</a>");
+                        var row = $("<tr></tr>").append(col);
+                        $("#serch_result").append(row);
+                    })
+                })
+            })
+
+            //去除陣列重覆值
+            function dedup(arr) {
+                var hashTable = {};
+
+                return arr.filter(function (el) {
+                    var key = JSON.stringify(el);
+                    //console.log(hashTable[key]);
+                    if (hashTable[key] == undefined) { //如果第一次遇到該key，hashTable[key]=1，return true
+                        hashTable[key] = 1;
+                        return true;
+                    } else {                 //若有遇過則直接return false
+                        return false;
+                    }
+                });
+            }
+
+            $("#serch_result").on('click', 'a', insert);  //點左邊課程連結，呼叫insert方法
+
+            function insert() {
+                var atxt = $(this).text();
+                var serno = atxt.substring(0, atxt.indexOf(" "));
+                $.each(newArray, function (index, value) {
+                    if (value.ser_no == serno) {       //找出點擊的課程資訊，放到右邊
+                        //console.log(serno);
+                        $('input[name="ser_no"]').val(value.ser_no);
+                        $('input[name="credit"]').val(value.credit);
+                        $('input[name="cou_cname"]').val(value.cou_cname);
+                        $('input[name="tea_cname"]').val(value.tea_cname);
+                        $('input[name="daytime"]').val(value.daytime);
+                        $('input[name="mark"]').val(value.mark);
+                    }
+                })
+            }
+
+            $.cookie('the_cookie', '', { expires: -1 }); //載入時先刪舊cookie
+
+            $('input[value="選課"]').on('click', function () { //點選課，把課程編號加到cookie
+                if ($.cookie('the_cookie') == null) {  //若無此cookie，則建立cookie把課程編號加到cookie
+                    str = $('input[name="ser_no"]').val();
+                    $.cookie('the_cookie', str);
+                } else {
+                    
+                    if (str.indexOf($('input[name="ser_no"]').val()) == -1) {
+                        str = str + ',' + $('input[name="ser_no"]').val();  //若已有cookie，則把課程編號加到cookie
+                        $.cookie('the_cookie', str);
+                    }
+                    
+                }
+            })
+
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container2">
+
+        <div class="header">
+            <div class="title">
+                Exercise 09
+                <h1>Elective System</h1>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <a href="../index.html">Home</a>
+            <div class="clearer"><span></span>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="content">
+
+                <p>
+                    實作一個選課系統。
+                    <br/>首先有個搜尋欄位，可輸入keyword進行搜尋(English Only)。
+                    <br/>每輸入一個字底下就會出現建議關鍵字連結(hint 1)，點選該連結則會自動帶入搜尋欄位。
+                    <br/>按下搜尋後呼叫搜尋網頁(hint 2)，搜尋結果會以JSON type回傳並顯示，結構如下：
+                    <li>ser_no</li>
+                    <li>credit</li>
+                    <li>cou_cname</li>
+                    <li>tea_cname</li>
+                    <li>daytime</li>
+                    <li>mark</li>
+                </p>
+                <p>
+                    搜尋結果將課程名稱連結顯示在左欄，點擊連結後右欄資訊即更新。
+                    <br />選定課程後點選「選課」，將ser_no計入cookie。
+                    <br/>點選「已選課程」時，將cookie內的ser_no的課程資訊顯示出來。(hint 3)
+                    <br/>
+                </p>
+                <p>以下範例課程AB僅作為題目理解用，理解題目敘述後，請將其刪除。</p>
+                <blockquote>
+                    Hint 1: 請使用<a target="_blank" href="../server/suggest.php">suggest.php</a>並輸入參數key，將回傳一個建議搜尋關鍵字。<a target="_blank" href="../server/suggest.php?key=Cal">範例</a>
+                </blockquote>
+                <blockquote>
+                    Hint 2: 請使用<a target="_blank" href="../server/search.php">search.php</a>並輸入參數key，會將單一課程資訊包成上述JSON後，再將所有課程包成一個JSON回傳。
+                    <a target="_blank" href="../server/search.php?key=Cal">範例</a>
+                </blockquote>
+                <blockquote>
+                    Hint 3: 請使用<a target="_blank" href="../server/schedule.php">schedule.php</a>並輸入參數ser_no，將回傳一個JSON表示課程資訊。<a target="_blank" href="../server/schedule.php?ser_no=64380">範例</a>
+                </blockquote>
+                <blockquote>
+                    Hint 4: <a target="_blank" href="http://www.w3schools.com/jquery/jquery_ref_ajax.asp">ajax</a>
+                </blockquote>
+                <blockquote>
+                    Note. 請確定可以執行php程式，並以AJAX方式使用上述三個php網頁程式。請勿修改php檔案。
+                </blockquote>
+
+                <p>
+
+                    <table>
+                        <tr>
+                            <td>
+                                <input id="keyword" type="text" size="70">
+                                <input type="button" value="搜尋" style="width:60px">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                您是不是要找:
+                                <a id="suggest"></a>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table>
+                        <tr>
+                            <td colspan="2">---------------------------搜尋結果---------------------------
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="200">
+                                <table id="serch_result">
+                                    <!-- 搜尋結果的課程名稱以一行一個課程顯示在這兒 -->
+                                    <!-- 此處僅為示範，實際點選課程名稱需顯示該課程所有詳細資訊 -->
+
+                                </table>
+                            </td>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td colspan="2">詳細資訊</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ser_no:</td>
+                                        <td>
+                                            <input type="text" name="ser_no" id="ser_no" disabled="true" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>credit:</td>
+                                        <td>
+                                            <input type="text" name="credit" id="credit" disabled="true" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>cou_cname:</td>
+                                        <td>
+                                            <input type="text" name="cou_cname" id="cou_cname" disabled="true" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>tea_cname:</td>
+                                        <td>
+                                            <input type="text" name="tea_cname" id="tea_cname" disabled="true" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>daytime:</td>
+                                        <td>
+                                            <input type="text" name="daytime" id="daytime" disabled="true" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>mark:</td>
+                                        <td>
+                                            <input type="text" name="mark" id="mark" disabled="true" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <input type="button" value="選課" onClick="alert('選課成功!')" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <input type="button" value="已選課程" onClick="window.open('exercise09-2.html')" />
+                    <script type="text/javascript">
+                    </script>
+
+
+                </p>
+
+            </div>
+            <div class="clearer"><span></span>
+            </div>
+
+        </div>
+
+        <div class="footer">&copy; 2006 <a href="index.html">Website.com</a>. Valid <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> &amp; <a href="http://validator.w3.org/check?uri=referer">XHTML</a>. Template design by <a href="http://templates.arcsin.se">Arcsin</a>
+        </div>
+    </div>
+</body>
+
+</html>

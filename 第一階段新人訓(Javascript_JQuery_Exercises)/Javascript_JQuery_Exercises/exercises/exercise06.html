@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+    <meta name="description" content="description" />
+    <meta name="keywords" content="keywords" />
+    <meta name="author" content="author" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="../default.css" media="screen" />
+    <title>Exercise 06 - Advertisement</title>
+    <script type="text/javascript" src="../jquery.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var num = 1;
+            var interval = setInterval(myFunction, 5000);
+            function myFunction() {
+                if (num == 3) { //如果現在是第三張圖，讓他更新變第一張
+                    num = 1;
+                    $("#ad").attr("src", "img/ex5ad" + num + ".jpg");
+                } else { //讓他更新變下一張圖
+                    num++;
+                    $("#ad").attr("src", "img/ex5ad" + num + ".jpg");
+                }
+            }
+
+            //當滑鼠移到選項上時，會隨著不同選項而更新。滑鼠停留在選項上停止自動更新
+            $('area[shape="rect"]').mouseover(function () {
+                clearInterval(interval); //停止自動更新
+                if ($(this).attr("coords") == "0,0,100,66") { //如果滑鼠移到最上面選項，主頁變第一張圖
+                    $("#ad").attr("src", "img/ex5ad1.jpg");
+                } else if ($(this).attr("coords") == "0,67,100,133") { //如果滑鼠移到中間選項，主頁變第二張圖
+                    $("#ad").attr("src", "img/ex5ad2.jpg");
+                } else {
+                    $("#ad").attr("src", "img/ex5ad3.jpg"); ////如果滑鼠移到下面選項，主頁變第三張圖
+                }
+            })
+
+            $('area[shape="rect"]').mouseout(function () { //滑鼠移開選項，開始自動更新
+                interval = setInterval(myFunction, 5000);
+            })
+
+        })
+    </script>
+</head>
+
+<body>
+    <div class="container2">
+
+        <div class="header">
+            <div class="title">
+                Exercise 06
+                <h1>Advertisement</h1>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <a href="../index.html">Home</a>
+            <div class="clearer"><span></span>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="content">
+
+                <p>
+                    下面為一個廣告區塊，左邊是主頁，右邊是選項。主頁有兩種狀態：
+                    <li>當滑鼠沒有在選項上時，每隔5秒自動更新</li>
+                    <li>當滑鼠移到選項上時，會隨著不同選項而更新。滑鼠停留在選項上停止自動更新</li>
+                    <br/>
+                    <blockquote>Hint: <a target="_blank" href="http://www.w3schools.com/tags/tag_area.asp">HTML area</a>
+                    </blockquote>
+                </p>
+
+                <!-- main part-->
+                <img id="ad" src="img/ex5ad1.jpg" />
+                <img src="img/select.jpg" usemap="#planetmap" />
+                <!-- menu -->
+                <map name="planetmap">
+                    <area shape="rect" coords="0,0,100,66" />
+                    <area shape="rect" coords="0,67,100,133" />
+                    <area shape="rect" coords="0,134,100,200" />
+                </map>
+            </div>
+
+            <div class="clearer"><span></span>
+            </div>
+
+        </div>
+
+        <div class="footer">&copy; 2006 <a href="index.html">Website.com</a>. Valid <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> &amp; <a href="http://validator.w3.org/check?uri=referer">XHTML</a>. Template design by <a href="http://templates.arcsin.se">Arcsin</a>
+        </div>
+    </div>
+</body>
+
+</html>

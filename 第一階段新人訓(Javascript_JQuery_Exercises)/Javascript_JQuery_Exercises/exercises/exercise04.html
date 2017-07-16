@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+    <meta name="description" content="description" />
+    <meta name="keywords" content="keywords" />
+    <meta name="author" content="author" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="../default.css" media="screen" />
+    <title>Exercise 04 - MSN Black List</title>
+    <script type="text/javascript" src="../jquery.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var lblock = $("#list1");
+            var rblock = $("#list2");
+            var lex = "test1";
+            var rex = "test2";
+            var roption = $("<option>").text(rex);
+            var loption = $("<option>").text(lex);
+            roption.appendTo(rblock);
+            loption.appendTo(lblock);
+
+            //點往右移動，左邊的字會移到右邊
+            $('input[value="往右移動>>"]').click(function () {
+                movetext(lblock, rblock);
+            })
+
+            //點往左移動，右邊的字會移到左邊
+            $('input[value="<<往左移動"]').click(function () {
+                //list2.find("option:selected").appendTo(list1);
+                movetext(rblock, lblock);
+            })
+
+            //刪除左邊選擇的文字
+            $("#del1").click(function () {
+                remove(lblock);
+            })
+
+            //刪除右邊選擇的文字
+            $("#del2").click(function () {
+                remove(rblock);
+            })
+
+            //新增左邊文字
+            $("#add1").click(function () {
+                insert(1, lblock);
+            })
+
+            //新增右邊文字
+            $("#add2").click(function () {
+                insert(2, rblock);
+            })
+
+            function insert(n, list) {
+                var input = $("#input" + n).val();
+                //alert(input2.trim().length);
+                if (input.trim().length == 0) return;  //如果input把空白去除長度為0則直接return
+                $("<option>").text(input).appendTo(list);
+            }
+
+            function remove(list) {
+                list.find("option:selected").remove();
+            }
+
+            function movetext(listA, listB) {
+                listA.find("option:selected").appendTo(listB);
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container2">
+
+        <div class="header">
+            <div class="title">
+                Exercise 04
+                <h1>MSN Black List</h1>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <a href="../index.html">Home</a>
+            <div class="clearer"><span></span>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="content">
+
+                <p>
+                    以下兩個選單中的資料可互相移動，且可以自行新增/刪除資料。
+                </p>
+
+                <p>
+                    <table>
+                        <tr align="center">
+                            <td>
+                                <select id="list1" size="10" style="width:200px">
+                                    
+                                </select>
+                            </td>
+                            <td width="140px">
+                                <input type="button" style="width:100px" value="往右移動>>">
+                                <br/>
+                                <br/>
+                                <br/>
+                                <input type="button" style="width:100px" value="<<往左移動">
+                            </td>
+                            <td>
+                                <select id="list2" size="10" style="width:200px">
+                                    
+                                </select>
+                            </td>
+                        </tr>
+                        <tr height="50px" align="center">
+                            <td>
+                                <input id="del1" type="button" style="width:50px" value="刪除">
+                                <td>
+                                    <td>
+                                        <input id="del2" type="button" style="width:50px" value="刪除">
+                                        <td>
+                        </tr>
+                        <tr align="center">
+                            <td>
+                                <input id="input1" type="text" style="width:100px">
+                                <input id="add1" type="button" style="width:50px" value="新增">
+                                <td>
+                                    <td>
+                                        <input id="input2" type="text" style="width:100px">
+                                        <input id="add2" type="button" style="width:50px" value="新增">
+                                        <td>
+                        </tr>
+                    </table>
+                </p>
+
+            </div>
+            <script type="text/javascript">
+            </script>
+
+            <div class="clearer"><span></span>
+            </div>
+
+        </div>
+
+        <div class="footer">&copy; 2006 <a href="index.html">Website.com</a>. Valid <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> &amp; <a href="http://validator.w3.org/check?uri=referer">XHTML</a>. Template design by <a href="http://templates.arcsin.se">Arcsin</a>
+        </div>
+    </div>
+</body>
+
+</html>
