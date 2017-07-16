@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	<display-name>Website</display-name>
+
+	<welcome-file-list>
+		<welcome-file>/WEB-INF/jsp/login.jsp</welcome-file>
+	</welcome-file-list>
+
+	<servlet>
+		<servlet-name>dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/mvc-config.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+<!-- 	default是tomcat配置的一個servlet，配置文件中被定義的東西會在Tomcat啟動的時候 被加載 -->
+	<servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.css</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.gif</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.jpg</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.png</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.js</url-pattern>
+    </servlet-mapping>
+
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>/WEB-INF/log4j.xml</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+
+	<filter>
+		<filter-name>SecurityFilter</filter-name>
+		<filter-class>website.filter.SecurityFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>SecurityFilter</filter-name>
+		<servlet-name>dispatcher</servlet-name>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+</web-app>

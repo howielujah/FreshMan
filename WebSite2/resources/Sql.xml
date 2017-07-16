@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+
+	<!-- Account Start-->
+	
+	<Account.checkAccount>
+		select * from account where account=? and password=?
+	</Account.checkAccount>
+	
+	<Account.insertAccount>
+		INSERT INTO account(account, password, name, birthday, phone) VALUES (?, ?, ?, ?, ?)
+	</Account.insertAccount>
+	
+	<Account.checkUser>
+		select * from account where account=?
+	</Account.checkUser>
+	
+	<!-- Account End-->
+	
+	
+	<!-- Industry Start -->
+	
+	<Industry.queryIndustry>
+		SELECT * FROM INDUSTRY LIMIT ?, ?
+	</Industry.queryIndustry>
+	
+	<Industry.getIndustryCount>
+		SELECT COUNT(*) COUNT FROM INDUSTRY
+	</Industry.getIndustryCount>
+	
+	<Industry.insertIndustry>
+		INSERT INTO INDUSTRY(IND_NAME, IND_DESC) VALUES (?, ?)
+	</Industry.insertIndustry>
+	
+	<Industry.updateIndustry>
+		UPDATE INDUSTRY SET IND_NAME = ?, IND_DESC = ? WHERE PK = ?
+	</Industry.updateIndustry>
+	
+	<Industry.deleteIndustry>
+		DELETE FROM INDUSTRY WHERE PK = ?
+	</Industry.deleteIndustry>
+	
+	<!-- Industry End -->
+</sqls>
