@@ -1,4 +1,4 @@
-package website.dao.impl;
+﻿package website.dao.impl;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ public class AccountDaoImpl implements AccountDao{
 	}
 
 	//注入jdbcTemplate
+	@Resource(name = "jdbcTemplate")
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}

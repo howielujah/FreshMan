@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
  
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -54,18 +54,18 @@
      </bean>
 	
 	<!-- 建立bean accountDao，把jdbcTemplate注入進accountDao -->
-	<bean id="accountDao" class="website.dao.impl.AccountDaoImpl">
-         <property name="jdbcTemplate" ref="jdbcTemplate"></property>
-     </bean>
+<!-- 	<bean id="accountDao" class="website.dao.impl.AccountDaoImpl"> -->
+<!--          <property name="jdbcTemplate" ref="jdbcTemplate"></property> -->
+<!--      </bean> -->
      
      <!-- 建立bean accountModel，把accountDao注入進accountModel -->
-     <bean id="accountModel" class="website.model.impl.AccountModelImpl">
-         <property name="accountDao" ref="accountDao"></property>
-     </bean>
+<!--      <bean id="accountModel" class="website.model.impl.AccountModelImpl"> -->
+<!--          <property name="accountDao" ref="accountDao"></property> -->
+<!--      </bean> -->
      
      <!-- 建立bean loginController，把accountModel注入進loginController -->
-      <bean id="loginController" class="website.controller.LoginController">
-         <property name="accountModel" ref="accountModel"></property>
-     </bean>
+<!--       <bean id="loginController" class="website.controller.LoginController"> -->
+<!--          <property name="accountModel" ref="accountModel"></property> -->
+<!--      </bean> -->
 	
 </beans>
